@@ -1,20 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <!-- 向locale传值 -->
+  <ConfigProvider :locale="getAntdLocale">
+  <router-view #="{Component}">
+  <component :is="Component"></component>
+  </router-view>
+  </ConfigProvider>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup lang="ts">
+import { ConfigProvider } from 'ant-design-vue';
+import { watchEffect } from 'vue';
+import {useRoute} from 'vue-router';
+  // import { transformI18n } from './hooks/useI18n';
+    // import { LockScreen } from '@/components/basic/lockscreen';
+    import { useLocale } from '@/locales/useLocale';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+const route=useRoute();
+const {getAntdLocale}=useLocale();
+
+watchEffect(()=>{
+  if(route.meta?.title){
+    //翻译网页标题
+    // document.title=transformI18n(route.meta.title);
   }
-}
+})
 </script>
 
-<style>
+<style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
